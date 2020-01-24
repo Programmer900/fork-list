@@ -49,9 +49,21 @@
         methods: {
             ...mapActions(['setSearchQuery', 'search','setFlag']),
             async eventHandler(obj, nameRepo, owner) {
-                const {data} = await axios.get(`https://api.github.com/repos/${owner}/${nameRepo}/forks`);
-                this.forks = data;
-                this.setFlag(true);
+
+                try {
+                    if(obj.forks) {
+                        const {data} = await axios.get(`https://api.github.com/repos/${owner}/${nameRepo}/forks`);
+                        this.forks = data;
+                        this.setFlag(true);
+                    } else {
+                        this.setFlag(false);
+                    }
+
+                }
+                catch (e) {
+                    console.log(e);
+                }
+
             },
         },
         computed: mapState(['loading', 'fork', 'user', 'flag', 'flagData']),
